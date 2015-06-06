@@ -30,6 +30,7 @@ int main() {
         &turn_on_broadcasting, sizeof(turn_on_broadcasting));
     if (setsockopt_status == -1) {
         print_error("Failed to turn on broadcasting on");
+        exit(1);
     }
 
     struct sockaddr_in broadcast_address;
@@ -44,12 +45,14 @@ int main() {
         (struct sockaddr*) &broadcast_address, sizeof(broadcast_address));
     if (sent_bytes_count == -1) {
         print_error("Failed to send broadcast message");
+        exit(1);
     }
 
     int close_status = close(broadcasting_socket);
     if (close_status == -1) {
         print_error("Failed to close broadcast socket");
+        exit(1);
     }
 
     return 0;
-}    
+}
