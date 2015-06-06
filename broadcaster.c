@@ -41,7 +41,7 @@ int main() {
     broadcast_address.sin_addr.s_addr = inet_addr(BROADCAST_ADDRESS);
     broadcast_address.sin_port = htons(broadcast_port);
 
-    ssize_t sent_bytes_count = sendto(broadcasting_socket, "", 1, 0,
+    ssize_t sent_bytes_count = sendto(broadcasting_socket, "", 0, 0,
         (struct sockaddr*) &broadcast_address, sizeof(broadcast_address));
     if (sent_bytes_count == -1) {
         print_error("Failed to send broadcast message");
