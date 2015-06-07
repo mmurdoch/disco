@@ -6,12 +6,12 @@ try:
     listening_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     listening_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
 
-    broadcast_address = ('', 54545)
-    listening_socket.bind(broadcast_address)
+    listener_address = ('', 54545)
+    listening_socket.bind(listener_address)
     print('Listening for broadcasts...')
 
     while True:
-        recv_data, addr = listening_socket.recvfrom(2048)
-        print('Received "' + recv_data + '" from ' + str(addr))
+        received_data, from_address = listening_socket.recvfrom(2048)
+        print('Received "' + received_data + '" from ' + str(from_address))
 except KeyboardInterrupt:
     pass
