@@ -1,22 +1,12 @@
 #include <arpa/inet.h>
-#include <errno.h>
 #include <sys/socket.h>
 #include <stdarg.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <netinet/in.h>
 #include <unistd.h>
 
-#define BROADCAST_ADDRESS "255.255.255.255"
-
-void print_error(const char* message) {
-    size_t message_length = strlen(message);
-    char error_message[message_length + 7];
-    strcpy(error_message, message);
-    strcpy(error_message + message_length, " (%s)\n");
-    fprintf(stderr, error_message, strerror(errno));
-}
+#include "broadcast.h"
 
 int main() {
     int broadcasting_socket = socket(PF_INET, SOCK_DGRAM, 0);
@@ -38,7 +28,7 @@ int main() {
 
     memset(&broadcast_address, 0, sizeof(broadcast_address));
     broadcast_address.sin_family = AF_INET;
-    broadcast_address.sin_addr.s_addr = inet_addr(BROADCAST_ADDRESS);
+    broadcast_address.sin_addr.s_addr = INADDR_BROADCAST;
     broadcast_address.sin_port = htons(broadcast_port);
 
     ssize_t sent_bytes_count = sendto(broadcasting_socket, "", 0, 0,
