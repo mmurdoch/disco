@@ -1,70 +1,66 @@
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 
-#include "broadcast.h"
+#include "network.h"
 
-int main() {
-    int listening_socket = socket(PF_INET, SOCK_DGRAM, 0);
-    if (listening_socket == -1) {
-        print_error("Failed to create listening socket");
-        exit(1);
+// TODO Document error return values - at least '0 on success, non-zero on failure'
+int create_broadcast_listener_socket(udp_socket_t* socket, int port,
+    size_t timeout_milliseconds) {
+
+    if (create_udp_socket(socket, NULL, port) == -1) {
+        return -1;
     }
 
-    int setsockopt_status;
-    /* Setting SO_REUSEADDR is not needed on Mac OS X (any BSD?) to allow
-       multiple copies of this program running on the same machine from
-       receiving messages */
-    /*int turn_on_address_reuse = 1;
-    setsockopt_status = setsockopt(listening_socket, SOL_SOCKET, SO_REUSEADDR,
-        &turn_on_address_reuse, sizeof(turn_on_address_reuse));
-    if (setsockopt_status == -1) {
-        print_error("Failed to turn on address reuse");
-        exit(1);
+    /* TODO SO_REUSEADDR comment (see listener.py) */
+    /*if (turn_on_socket_option(listener_socket, SO_REUSEADDR) == -1) {
+        destroy_udp_socket(socket);
+        return -1;
     }*/
 
-    /* Setting SO_REUSEPORT is needed on Mac OS X (any BSD?) to allow multiple
-       copies of this program running on the same machine from reeiving messages
-       Windows systems do not recognize this setting. What about Linux? What
-       about Solaris? */
-    int turn_on_port_reuse = 1;
-    setsockopt_status = setsockopt(listening_socket, SOL_SOCKET, SO_REUSEPORT,
-        &turn_on_port_reuse, sizeof(turn_on_port_reuse));
-    if (setsockopt_status == -1) {
-        print_error("Failed to turn on port reuse");
-        exit(1);
+    if (turn_on_socket_option(socket, SO_REUSEPORT) == -1) {
+        destroy_udp_socket(socket);
+        return -1;
     }
 
-    struct sockaddr_in listener_address;
-    socklen_t address_length = sizeof(listener_address);
-    int listener_port = 54545;
-
-    memset(&listener_address, 0, sizeof(listener_address));
-    listener_address.sin_family = AF_INET;
-    listener_address.sin_addr.s_addr = INADDR_ANY;
-    listener_address.sin_port = htons(listener_port);
-
-    printf("Listening for broadcasts...\n");
-
-    size_t buffer_length = 8;
-    char buffer[buffer_length];
-
-    while (1) {
-        ssize_t received_bytes_count = recvfrom(listening_socket, &buffer, 
-            buffer_length, 0, (struct sockaddr*) &listener_address, 
-            &address_length);
-
-        printf("Received \"%s\" from \n", buffer);
+    if (bind_to_address(socket) == -1) {
+        destroy_udp_socket(socket);
+        return -1;
     }
 
-    int close_status = close(listening_socket);
-    if (close_status == -1) {
-        print_error("Failed to close listening socket");
-        exit(1);
+    time_t seconds = timeout_milliseconds/1000;
+    suseconds_t microseconds = (timeout_milliseconds-(1000*seconds))*1000;
+    // TODO Take milliseconds instead
+    if (set_receive_timeout(socket, seconds, microseconds) == -1) {
+        destroy_udp_socket(socket);
+        return -1;
     }
+
+    return 0;
+}
+
+int main() {
+    udp_socket_t listener_socket;
+    int port = 4950;
+
+    if (create_broadcast_listener_socket(&listener_socket, 4950, 1000) != 0) {
+        fprintf(stderr, "Failed to create broadcast listening socket\n");
+        return 2;
+    }
+
+    size_t max_message_length = 100;
+    char message[max_message_length+1];
+
+    int message_length = receive_message(&listener_socket,
+        message, max_message_length);
+    if (message_length == -1) {
+        destroy_udp_socket(&listener_socket);
+        fprintf(stderr, "Failed to receive broadcast message\n");
+        return 2;
+    }
+
+    message[message_length] = '\0';
+    printf("%s", message);
+
+    destroy_udp_socket(&listener_socket);
 
     return 0;
 }
