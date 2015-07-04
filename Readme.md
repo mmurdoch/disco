@@ -13,7 +13,7 @@ TODO
 * Pull setsockopt calls out into a function (turn_on_socket_option(socket, option))
 
 * Work out discovery API
-
+```
     peer_locator_t {
         int (*get_peers)(dsc_peers_t* peers) // Pointer to function for returning peers
     }
@@ -100,3 +100,4 @@ TODO
     //     A sends 'ALIVE' to B_address
     //     A sends 'ALIVE' to C_address
     // NB: Every node just broadcasting 'HERE' + address could work for discovery and heartbeat ON LOCAL NETWORK
+```
