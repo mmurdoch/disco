@@ -20,7 +20,7 @@ int create_broadcast_socket(udp_socket_t* broadcast_socket, int port) {
         return -1;
     }
 
-    if (turn_on_socket_option(broadcast_socket, SO_BROADCAST) == -1) {
+    if (turn_on_socket_option(*broadcast_socket, SO_BROADCAST) == -1) {
         return -1;
     }
 
@@ -36,7 +36,7 @@ void destroy_broadcast_socket(udp_socket_t* broadcast_socket) {
     destroy_udp_socket(broadcast_socket);
 }
 
-int broadcast_message(udp_socket_t* broadcast_socket, const char* message) {
+int broadcast_message(udp_socket_t broadcast_socket, const char* message) {
     return send_message(broadcast_socket, message);
 }
 
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    if (broadcast_message(&broadcast_socket, "DSC10HERE") == -1) {
+    if (broadcast_message(broadcast_socket, "DSC10HERE") == -1) {
         fprintf(stderr, "Failed to send broadcast message\n");
     }
 
