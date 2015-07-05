@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "udp.h"
+#include <disco/udp.h>
 
 int create_broadcast_listener_socket(udp_socket_t* socket, int port,
     size_t timeout_milliseconds) {

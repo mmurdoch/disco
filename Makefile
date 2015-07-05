@@ -1,4 +1,6 @@
 all:
-	gcc broadcaster.c udp.c -o broadcaster
-	gcc listener.c udp.c -o listener
-	python test.py
+	rm -rf build
+	mkdir -p build/test
+	gcc test/broadcaster.c src/disco/udp.c -I src -o build/test/broadcaster
+	gcc test/listener.c src/disco/udp.c -I src -o build/test/listener
+	python test/test.py

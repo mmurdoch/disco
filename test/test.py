@@ -11,9 +11,10 @@ def assert_output(process, expected_output):
             expected_output, actual_output))
 
 
-listener_1 = start_process('./listener')
-listener_2 = start_process('./listener')
-broadcaster = start_process('./broadcaster')
+test_dir = './build/test/'
+listener_1 = start_process(test_dir + 'listener')
+listener_2 = start_process(test_dir + 'listener')
+broadcaster = start_process(test_dir + 'broadcaster')
 
 expected_output = 'DSC10HERE'
 
@@ -23,4 +24,3 @@ try:
 except AssertionError as e:
     print(str(e))
     exit(1)
-
