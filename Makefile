@@ -1,4 +1,4 @@
 all:
-	gcc broadcaster.c network.c -o broadcaster
-	gcc listener.c network.c -o listener
+	gcc broadcaster.c udp.c -o broadcaster
+	gcc listener.c udp.c -o listener
 	python test.py

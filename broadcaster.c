@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "network.h"
+#include "udp.h"
 
 /**
  * Creates a socket for broadcasting messages.
