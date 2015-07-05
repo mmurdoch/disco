@@ -11,9 +11,6 @@
  * @return 0 on success, non-zero on failure
  */
 int create_broadcast_socket(udp_socket_t* broadcast_socket, int port) {
-
-    /* Change this to use INADDR_BROADCAST? */
-    /* Note that IPv6 doesn't support broadcasting, only multicasting) */
     char* broadcast_ip = "255.255.255.255";
 
     if (create_udp_socket(broadcast_socket, broadcast_ip, port) == -1) {

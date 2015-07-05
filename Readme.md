@@ -7,7 +7,7 @@ TODO
   * broadcast.h - broadcast - multicast on IPv6 - handling (broadcast socket creation/destruction, messaging, etc.)
   * disco.h - discovery API (handshake, versioning, etc.)
 * broadcaster.c - change to use INADDR_BROADCAST (rather than 255.255.255.255)
-* listener.c - add comment about SO_REUSEADDR on Mac OS X (and other BSDs?)
+* Support multicast on IPv6
 * Make C versions work on Windows
 * Make C versions work on Linux
 * Encapsulate discovery into a library ('Disco') - prefix functions with dsc_
