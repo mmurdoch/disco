@@ -2,7 +2,6 @@
 
 #include "network.h"
 
-// TODO Document error return values - at least '0 on success, non-zero on failure'
 int create_broadcast_listener_socket(udp_socket_t* socket, int port,
     size_t timeout_milliseconds) {
 
@@ -10,12 +9,18 @@ int create_broadcast_listener_socket(udp_socket_t* socket, int port,
         return -1;
     }
 
-    /* TODO SO_REUSEADDR comment (see listener.py) */
+    /* Setting SO_REUSEADDR is not needed on Mac OS X (any BSD?) to allow
+       multiple copies of this program running on the same machine from
+       receiving messages. It is probably needed on Windows. */
     /*if (turn_on_socket_option(listener_socket, SO_REUSEADDR) == -1) {
         destroy_udp_socket(socket);
         return -1;
     }*/
 
+    /* Setting SO_REUSEPORT is needed on Mac OS X (any BSD?) to allow multiple
+       copies of this program running on the same machine from receiving messages.
+       Windows systems do not recognize this setting. What about Linux? What
+       about Solaris? */
     if (turn_on_socket_option(socket, SO_REUSEPORT) == -1) {
         destroy_udp_socket(socket);
         return -1;
