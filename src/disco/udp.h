@@ -1,5 +1,5 @@
-#ifndef NETWORK_H
-#define NETWORK_H
+#ifndef DISCO_UDP_H
+#define DISCO_UDP_H
 
 #include <netdb.h>
 
@@ -106,4 +106,4 @@ int send_message(udp_socket_t socket, const char* message);
 int receive_message(udp_socket_t socket, char* message,
     size_t max_message_length);
 
-#endif // NETWORK_H
+#endif // DISCO_UDP_H
