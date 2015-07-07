@@ -31,9 +31,7 @@ int create_broadcast_listener_socket(udp_socket_t* socket, int port,
         return -1;
     }
 
-    time_t seconds = timeout_milliseconds/1000;
-    suseconds_t microseconds = (timeout_milliseconds-(1000*seconds))*1000;
-    if (set_receive_timeout(*socket, seconds, microseconds) == -1) {
+    if (set_receive_timeout(*socket, timeout_milliseconds) == -1) {
         destroy_udp_socket(socket);
         return -1;
     }

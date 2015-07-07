@@ -1,7 +1,6 @@
 TODO
 ---
 * Document error return values - at least '0 on success, non-zero on failure' (to allow scope for evolving by expanding return values to give better error information)
-* Change set_receive_timeout() to take only milliseconds
 * Levelize
   * network.h - socket handling (options, creation, address handling, port conversion, etc.)
   * broadcast.h - broadcast - multicast on IPv6 - handling (broadcast socket creation/destruction, messaging, etc.)

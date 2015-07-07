@@ -37,12 +37,10 @@ int turn_on_socket_option(udp_socket_t socket, int option_name);
  * Sets the timeout for receiving data from a UDP socket.
  *
  * @param socket the socket for which to set the timeout
- * @param seconds the timeout duration - seconds part
- * @param microseconds the timeout duration - microseconds part
+ * @param milliseconds the timeout duration in milliseconds
  * @return 0 on success, -1 on failure
  */
-int set_receive_timeout(udp_socket_t socket, time_t seconds,
-    suseconds_t microseconds);
+int set_receive_timeout(udp_socket_t socket, size_t milliseconds);
 
 /**
  * Binds a UDP socket to its address so that it can receive messages.

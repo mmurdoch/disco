@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include "time.h"
 
 struct _udp_socket_t {
     struct addrinfo* all_addresses;
@@ -100,11 +101,8 @@ int turn_on_socket_option(udp_socket_t socket, int option_name) {
         &turn_on, sizeof(turn_on));
 }
 
-int set_receive_timeout(udp_socket_t socket, time_t seconds,
-    suseconds_t microseconds) {
-    struct timeval timeout;
-    timeout.tv_sec = seconds;
-    timeout.tv_usec = microseconds;
+int set_receive_timeout(udp_socket_t socket, size_t milliseconds) {
+    struct timeval timeout = milliseconds_to_timeval(milliseconds);
 
     return setsockopt(socket->socket, SOL_SOCKET, SO_RCVTIMEO,
         &timeout, sizeof(timeout));
