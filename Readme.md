@@ -3,6 +3,8 @@ public domain for maximum portability.
 
 TODO
 ---
+* Add receive_message() broadcast listener function
+* Add timeout_milliseconds parameter to create_broadcast_socket()
 * Levelize
   * network.h - socket handling (options, creation, address handling, port conversion, etc.)
   * broadcast.h - broadcast - multicast on IPv6 - handling (broadcast socket creation/destruction, messaging, etc.)

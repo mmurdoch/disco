@@ -9,5 +9,5 @@ all:
 	build/test/time-test
 
 	gcc test/broadcaster.c src/disco/udp.c src/disco/time.c src/disco/broadcast.c -I src -o build/test/broadcaster
-	gcc test/listener.c src/disco/udp.c src/disco/time.c -I src -o build/test/listener
+	gcc test/listener.c src/disco/udp.c src/disco/time.c src/disco/broadcast.c -I src -o build/test/listener
 	python test/test.py
