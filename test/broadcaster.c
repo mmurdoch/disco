@@ -13,11 +13,11 @@
 int create_broadcast_socket(udp_socket_t* broadcast_socket, int port) {
     char* broadcast_ip = "255.255.255.255";
 
-    if (create_udp_socket(broadcast_socket, broadcast_ip, port) == -1) {
+    if (create_udp_socket(broadcast_socket, broadcast_ip, port) != 0) {
         return -1;
     }
 
-    if (turn_on_socket_option(*broadcast_socket, SO_BROADCAST) == -1) {
+    if (turn_on_socket_option(*broadcast_socket, SO_BROADCAST) != 0) {
         return -1;
     }
 
@@ -41,12 +41,12 @@ int main(int argc, char *argv[]) {
     udp_socket_t broadcast_socket;
     int port = 4950;
 
-    if (create_broadcast_socket(&broadcast_socket, port) == -1) {
+    if (create_broadcast_socket(&broadcast_socket, port) != 0) {
         fprintf(stderr, "Failed to create broadcasting socket\n");
         exit(1);
     }
 
-    if (broadcast_message(broadcast_socket, "DSC10HERE") == -1) {
+    if (broadcast_message(broadcast_socket, "DSC10HERE") != 0) {
         fprintf(stderr, "Failed to send broadcast message\n");
     }
 

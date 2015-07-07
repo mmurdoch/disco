@@ -5,7 +5,7 @@
 int create_broadcast_listener_socket(udp_socket_t* socket, int port,
     size_t timeout_milliseconds) {
 
-    if (create_udp_socket(socket, NULL, port) == -1) {
+    if (create_udp_socket(socket, NULL, port) != 0) {
         return -1;
     }
 
@@ -21,17 +21,17 @@ int create_broadcast_listener_socket(udp_socket_t* socket, int port,
        copies of this program running on the same machine from receiving messages.
        Windows systems do not recognize this setting. What about Linux? What
        about Solaris? */
-    if (turn_on_socket_option(*socket, SO_REUSEPORT) == -1) {
+    if (turn_on_socket_option(*socket, SO_REUSEPORT) != 0) {
         destroy_udp_socket(socket);
         return -1;
     }
 
-    if (bind_to_address(*socket) == -1) {
+    if (bind_to_address(*socket) != 0) {
         destroy_udp_socket(socket);
         return -1;
     }
 
-    if (set_receive_timeout(*socket, timeout_milliseconds) == -1) {
+    if (set_receive_timeout(*socket, timeout_milliseconds) != 0) {
         destroy_udp_socket(socket);
         return -1;
     }

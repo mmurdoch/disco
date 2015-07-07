@@ -29,7 +29,7 @@ void destroy_udp_socket(udp_socket_t* the_socket);
  *
  * @param socket the socket for which to turn on the option
  * @param option_name the name of the option to turn on
- * @return 0 on success, -1 on failure
+ * @return 0 on success, non-zero on failure
  */
 int turn_on_socket_option(udp_socket_t socket, int option_name);
 
@@ -38,7 +38,7 @@ int turn_on_socket_option(udp_socket_t socket, int option_name);
  *
  * @param socket the socket for which to set the timeout
  * @param milliseconds the timeout duration in milliseconds
- * @return 0 on success, -1 on failure
+ * @return 0 on success, non-zero on failure
  */
 int set_receive_timeout(udp_socket_t socket, size_t milliseconds);
 
@@ -46,7 +46,7 @@ int set_receive_timeout(udp_socket_t socket, size_t milliseconds);
  * Binds a UDP socket to its address so that it can receive messages.
  *
  * @param socket the socket for which to bind to its address
- * @return 0 on success, -1 on failure
+ * @return 0 on success, non-zero on failure
  */
 int bind_to_address(udp_socket_t socket);
 
@@ -88,7 +88,7 @@ int get_port(udp_socket_t socket);
  * @param socket the socket on which to send the message
  * @param message the null-terminated message to send (the null terminator is
  * not sent)
- * @return number of bytes sent or -1 on error
+ * @return number of bytes sent or negative integer on error
  */
 int send_message(udp_socket_t socket, const char* message);
 
@@ -99,7 +99,8 @@ int send_message(udp_socket_t socket, const char* message);
  * @param message the buffer into which to write the message
  * @param max_message_length the maximum number of bytes to read into the
  * message buffer
- * @return the number of bytes written to the message buffer or -1 on error
+ * @return the number of bytes written to the message buffer or negative
+ * integer on error
  */
 int receive_message(udp_socket_t socket, char* message,
     size_t max_message_length);
