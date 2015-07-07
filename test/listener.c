@@ -2,10 +2,12 @@
 
 #include <disco/udp.h>
 
-int create_broadcast_listener_socket(udp_socket_t* socket, int port,
+void destroy_broadcast_listener_socket(udp_socket_t* listener_socket);
+
+int create_broadcast_listener_socket(udp_socket_t* listener_socket, int port,
     size_t timeout_milliseconds) {
 
-    if (create_udp_socket(socket, NULL, port) != 0) {
+    if (create_udp_socket(listener_socket, NULL, port) != 0) {
         return -1;
     }
 
@@ -13,7 +15,7 @@ int create_broadcast_listener_socket(udp_socket_t* socket, int port,
        multiple copies of this program running on the same machine from
        receiving messages. It is probably needed on Windows. */
     /*if (turn_on_socket_option(listener_socket, SO_REUSEADDR) == -1) {
-        destroy_udp_socket(socket);
+        destroy_udp_socket(listener_socket);
         return -1;
     }*/
 
@@ -21,22 +23,26 @@ int create_broadcast_listener_socket(udp_socket_t* socket, int port,
        copies of this program running on the same machine from receiving messages.
        Windows systems do not recognize this setting. What about Linux? What
        about Solaris? */
-    if (turn_on_socket_option(*socket, SO_REUSEPORT) != 0) {
-        destroy_udp_socket(socket);
+    if (turn_on_socket_option(*listener_socket, SO_REUSEPORT) != 0) {
+        destroy_broadcast_listener_socket(listener_socket);
         return -1;
     }
 
-    if (bind_to_address(*socket) != 0) {
-        destroy_udp_socket(socket);
+    if (bind_to_address(*listener_socket) != 0) {
+        destroy_broadcast_listener_socket(listener_socket);
         return -1;
     }
 
-    if (set_receive_timeout(*socket, timeout_milliseconds) != 0) {
-        destroy_udp_socket(socket);
+    if (set_receive_timeout(*listener_socket, timeout_milliseconds) != 0) {
+        destroy_broadcast_listener_socket(listener_socket);
         return -1;
     }
 
     return 0;
+}
+
+void destroy_broadcast_listener_socket(udp_socket_t* listener_socket) {
+    destroy_udp_socket(listener_socket);
 }
 
 int main() {

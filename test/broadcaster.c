@@ -3,6 +3,8 @@
 
 #include <disco/udp.h>
 
+void destroy_broadcast_socket(udp_socket_t* broadcast_socket);
+
 /**
  * Creates a socket for broadcasting messages.
  *
@@ -18,6 +20,7 @@ int create_broadcast_socket(udp_socket_t* broadcast_socket, int port) {
     }
 
     if (turn_on_socket_option(*broadcast_socket, SO_BROADCAST) != 0) {
+        destroy_broadcast_socket(broadcast_socket);
         return -1;
     }
 
