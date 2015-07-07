@@ -38,7 +38,7 @@ int broadcast_message(udp_socket_t broadcast_socket, const char* message) {
     return send_message(broadcast_socket, message);
 }
 
-int create_broadcast_listener_socket(udp_socket_t* listener_socket, int port,
+int create_listener_socket(udp_socket_t* listener_socket, int port,
     size_t timeout_milliseconds) {
 
     if (create_udp_socket(listener_socket, NULL, port) != 0) {
@@ -58,23 +58,23 @@ int create_broadcast_listener_socket(udp_socket_t* listener_socket, int port,
        Windows systems do not recognize this setting. What about Linux? What
        about Solaris? */
     if (turn_on_socket_option(*listener_socket, SO_REUSEPORT) != 0) {
-        destroy_broadcast_listener_socket(listener_socket);
+        destroy_listener_socket(listener_socket);
         return -1;
     }
 
     if (bind_to_address(*listener_socket) != 0) {
-        destroy_broadcast_listener_socket(listener_socket);
+        destroy_listener_socket(listener_socket);
         return -1;
     }
 
     if (set_receive_timeout(*listener_socket, timeout_milliseconds) != 0) {
-        destroy_broadcast_listener_socket(listener_socket);
+        destroy_listener_socket(listener_socket);
         return -1;
     }
 
     return 0;
 }
 
-void destroy_broadcast_listener_socket(udp_socket_t* listener_socket) {
+void destroy_listener_socket(udp_socket_t* listener_socket) {
     destroy_udp_socket(listener_socket);
 }

@@ -21,9 +21,9 @@ void destroy_broadcast_socket(udp_socket_t* broadcast_socket);
 
 int broadcast_message(udp_socket_t broadcast_socket, const char* message);
 
-int create_broadcast_listener_socket(udp_socket_t* listener_socket, int port,
+int create_listener_socket(udp_socket_t* listener_socket, int port,
     size_t timeout_milliseconds);
 
-void destroy_broadcast_listener_socket(udp_socket_t* listener_socket);
+void destroy_listener_socket(udp_socket_t* listener_socket);
 
 #endif // DISCO_BROADCAST_H

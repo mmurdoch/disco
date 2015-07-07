@@ -7,7 +7,7 @@ int main() {
     udp_socket_t listener_socket;
     int port = 4950;
 
-    if (create_broadcast_listener_socket(&listener_socket, 4950, 1000) != 0) {
+    if (create_listener_socket(&listener_socket, 4950, 1000) != 0) {
         fprintf(stderr, "Failed to create broadcast listening socket\n");
         return 2;
     }
@@ -26,7 +26,7 @@ int main() {
     message[message_length] = '\0';
     printf("%s", message);
 
-    destroy_udp_socket(&listener_socket);
+    destroy_listener_socket(&listener_socket);
 
     return 0;
 }
