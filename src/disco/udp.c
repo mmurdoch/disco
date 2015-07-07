@@ -7,12 +7,6 @@
 #include <unistd.h>
 #include "time.h"
 
-struct _udp_socket_t {
-    struct addrinfo* all_addresses;
-    struct addrinfo* socket_address;
-    int socket;
-};
-
 int decimal_string_length(int i) {
     /* Include space for terminating null */
     int length = 1;
@@ -39,16 +33,6 @@ void port_to_string(int port, char* port_string) {
 
 int create_udp_socket(udp_socket_t* the_socket, const char* ip_address,
     int port) {
-
-    struct _udp_socket_t* socket_impl;
-    socket_impl = (struct _udp_socket_t *) malloc(sizeof(*socket_impl));
-
-    if (socket_impl == NULL) {
-        return -1;
-    }
-
-    memset(socket_impl, 0, sizeof(*socket_impl));
-    *the_socket = socket_impl;
 
     int port_string_length = decimal_string_length(port);
     char port_string[port_string_length];
@@ -82,26 +66,26 @@ int create_udp_socket(udp_socket_t* the_socket, const char* ip_address,
         return -1;
     }
 
-    (*the_socket)->all_addresses = all_addresses;
-    (*the_socket)->socket_address = current;
-    (*the_socket)->socket = current_socket;
+    the_socket->all_addresses = all_addresses;
+    the_socket->socket_address = current;
+    the_socket->socket = current_socket;
 
     return 0;
 }
 
 void destroy_udp_socket(udp_socket_t* the_socket) {
-    close((*the_socket)->socket);
-    freeaddrinfo((*the_socket)->all_addresses);
-    free((*the_socket));
+    close(the_socket->socket);
+    freeaddrinfo(the_socket->all_addresses);
+    free(the_socket);
 }
 
-int turn_on_socket_option(udp_socket_t socket, int option_name) {
+int turn_on_socket_option(udp_socket_t* socket, int option_name) {
     int turn_on = 1;
     return setsockopt(socket->socket, SOL_SOCKET, option_name,
         &turn_on, sizeof(turn_on));
 }
 
-int set_receive_timeout(udp_socket_t socket, size_t milliseconds) {
+int set_receive_timeout(udp_socket_t* socket, size_t milliseconds) {
     struct timeval timeout = milliseconds_to_timeval(milliseconds);
 
     return setsockopt(socket->socket, SOL_SOCKET, SO_RCVTIMEO,
@@ -116,33 +100,33 @@ in_port_t get_port_from_sockaddr(struct sockaddr* address) {
     return (((struct sockaddr_in6*)address)->sin6_port);
 }
 
-int get_socket_handle(udp_socket_t socket) {
+int get_socket_handle(udp_socket_t* socket) {
     return socket->socket;
 }
 
-struct sockaddr* get_address(udp_socket_t socket) {
+struct sockaddr* get_address(udp_socket_t* socket) {
     return socket->socket_address->ai_addr;
 }
 
-socklen_t get_address_length(udp_socket_t socket) {
+socklen_t get_address_length(udp_socket_t* socket) {
     return socket->socket_address->ai_addrlen;
 }
 
-int get_port(udp_socket_t socket) {
+int get_port(udp_socket_t* socket) {
     return ntohs(get_port_from_sockaddr(get_address(socket)));
 }
 
-int send_message(udp_socket_t socket, const char* message) {
+int send_message(udp_socket_t* socket, const char* message) {
     return sendto(get_socket_handle(socket), message, strlen(message), 0,
         get_address(socket), get_address_length(socket));
 }
 
-int bind_to_address(udp_socket_t socket) {
+int bind_to_address(udp_socket_t* socket) {
     return bind(get_socket_handle(socket), get_address(socket),
         get_address_length(socket));
 }
 
-int receive_message(udp_socket_t socket, char* message,
+int receive_message(udp_socket_t* socket, char* message,
     size_t max_message_length) {
     struct sockaddr_storage sent_from_address;
     socklen_t sent_from_address_length = sizeof(sent_from_address);

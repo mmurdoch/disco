@@ -10,14 +10,16 @@
  * @param broadcast_socket on success populated with the created socket
  * @return 0 on success, non-zero on failure
  */
-int create_broadcast_socket(udp_socket_t* broadcast_socket, int port) {
+int create_broadcast_socket(broadcast_socket_t* broadcast_socket, int port) {
     char* broadcast_ip = "255.255.255.255";
 
-    if (create_udp_socket(broadcast_socket, broadcast_ip, port) != 0) {
+    udp_socket_t* udp_socket = &(broadcast_socket->udp_socket);
+
+    if (create_udp_socket(udp_socket, broadcast_ip, port) != 0) {
         return -1;
     }
 
-    if (turn_on_socket_option(*broadcast_socket, SO_BROADCAST) != 0) {
+    if (turn_on_socket_option(udp_socket, SO_BROADCAST) != 0) {
         destroy_broadcast_socket(broadcast_socket);
         return -1;
     }
@@ -30,18 +32,20 @@ int create_broadcast_socket(udp_socket_t* broadcast_socket, int port) {
  *
  * @param broadcast_socket the socket to destroy
  */
-void destroy_broadcast_socket(udp_socket_t* broadcast_socket) {
-    destroy_udp_socket(broadcast_socket);
+void destroy_broadcast_socket(broadcast_socket_t* broadcast_socket) {
+    destroy_udp_socket(&(broadcast_socket->udp_socket));
 }
 
-int broadcast_message(udp_socket_t broadcast_socket, const char* message) {
-    return send_message(broadcast_socket, message);
+int broadcast_message(broadcast_socket_t* broadcast_socket, const char* message) {
+    return send_message(&(broadcast_socket->udp_socket), message);
 }
 
-int create_listener_socket(udp_socket_t* listener_socket, int port,
+int create_listener_socket(listener_socket_t* listener_socket, int port,
     size_t timeout_milliseconds) {
 
-    if (create_udp_socket(listener_socket, NULL, port) != 0) {
+    udp_socket_t* udp_socket = &(listener_socket->udp_socket);
+
+    if (create_udp_socket(udp_socket, NULL, port) != 0) {
         return -1;
     }
 
@@ -57,17 +61,17 @@ int create_listener_socket(udp_socket_t* listener_socket, int port,
        copies of this program running on the same machine from receiving messages.
        Windows systems do not recognize this setting. What about Linux? What
        about Solaris? */
-    if (turn_on_socket_option(*listener_socket, SO_REUSEPORT) != 0) {
+    if (turn_on_socket_option(udp_socket, SO_REUSEPORT) != 0) {
         destroy_listener_socket(listener_socket);
         return -1;
     }
 
-    if (bind_to_address(*listener_socket) != 0) {
+    if (bind_to_address(udp_socket) != 0) {
         destroy_listener_socket(listener_socket);
         return -1;
     }
 
-    if (set_receive_timeout(*listener_socket, timeout_milliseconds) != 0) {
+    if (set_receive_timeout(udp_socket, timeout_milliseconds) != 0) {
         destroy_listener_socket(listener_socket);
         return -1;
     }
@@ -75,6 +79,6 @@ int create_listener_socket(udp_socket_t* listener_socket, int port,
     return 0;
 }
 
-void destroy_listener_socket(udp_socket_t* listener_socket) {
-    destroy_udp_socket(listener_socket);
+void destroy_listener_socket(listener_socket_t* listener_socket) {
+    destroy_udp_socket(&(listener_socket->udp_socket));
 }

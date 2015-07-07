@@ -3,6 +3,8 @@ public domain for maximum portability.
 
 TODO
 ---
+* Make structure pointers const where appropriate
+* Comment broadcast.h
 * Add receive_message() broadcast listener function
 * Add timeout_milliseconds parameter to create_broadcast_socket()
 * Cleanup Makefile
