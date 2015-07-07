@@ -1,3 +1,6 @@
+Disco is a network peer discovery library written in C and released into the
+public domain for maximum portability.
+
 TODO
 ---
 * Levelize
