@@ -76,7 +76,6 @@ int create_udp_socket(udp_socket_t* the_socket, const char* ip_address,
 void destroy_udp_socket(udp_socket_t* the_socket) {
     close(the_socket->socket);
     freeaddrinfo(the_socket->all_addresses);
-    free(the_socket);
 }
 
 int turn_on_socket_option(udp_socket_t* socket, int option_name) {
