@@ -100,8 +100,8 @@ int send_message(udp_socket_t* socket, const char* message);
  * Receives a message from a socket.
  *
  * @param socket the socket from which to receive the message
- * @param message the buffer into which to write the message
- * @param max_message_length the maximum number of bytes to read into the
+ * @param message_buffer the buffer into which to write the message
+ * @param message_buffer_size the maximum number of bytes to read into the
  * message buffer
  * @return the number of bytes written to the message buffer or negative
  * integer on error

@@ -3,14 +3,11 @@ public domain for maximum portability.
 
 TODO
 ---
-* Make structure pointers const where appropriate
-* Comment broadcast.h
-* Add receive_message() broadcast listener function
 * Add timeout_milliseconds parameter to create_broadcast_socket()
 * Cleanup Makefile
 * Levelize
   * network.h - socket handling (options, creation, address handling, port conversion, etc.)
-  * broadcast.h - broadcast - multicast on IPv6 - handling (broadcast socket creation/destruction, messaging, etc.)
+  * broadcast.h - broadcast handling (broadcast socket creation/destruction, messaging, etc.)
   * disco.h - discovery API (handshake, versioning, etc.)
 * broadcaster.c - change to use INADDR_BROADCAST (rather than 255.255.255.255)
 * Support multicast on IPv6
