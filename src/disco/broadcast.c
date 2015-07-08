@@ -79,12 +79,16 @@ void destroy_listener_socket(listener_socket_t* listener_socket) {
 
 int receive_broadcast(listener_socket_t* listener_socket, char* message_buffer,
     size_t message_buffer_size) {
+    if (message_buffer_size == 0) {
+        return 0;
+    }
+
     int message_length = receive_message(&(listener_socket->udp_socket),
         message_buffer, message_buffer_size-1);
     if (message_length == -1) {
         return -1;
     }
 
-    message_buffer[message_buffer_size] = '\0';
+    message_buffer[message_length] = '\0';
     return message_length + 1;
 }
