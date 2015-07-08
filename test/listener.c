@@ -7,7 +7,7 @@ int main() {
     listener_socket_t listener_socket;
     int port = 4950;
 
-    if (create_listener_socket(&listener_socket, 4950, 1000) != 0) {
+    if (create_listener_socket(&listener_socket, port, 1000) != 0) {
         fprintf(stderr, "Failed to create broadcast listening socket\n");
         return 1;
     }
