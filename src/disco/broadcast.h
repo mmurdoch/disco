@@ -60,7 +60,7 @@ int create_listener_socket(listener_socket_t* listener_socket, int port,
 void destroy_listener_socket(listener_socket_t* listener_socket);
 
 /**
- * Receives a broadcasted message.
+ * Receives a broadcasted message and null-terminates it.
  *
  * @param listener_socket the socket on which to receive the message
  * @param message_buffer the buffer into which to receive the message
