@@ -56,4 +56,16 @@ int create_listener_socket(listener_socket_t* listener_socket, int port,
  */
 void destroy_listener_socket(listener_socket_t* listener_socket);
 
+/**
+ * Receives a broadcasted message.
+ *
+ * @param listener_socket the socket on which to receive the message
+ * @param message_buffer the buffer into which to receive the message
+ * @param message_buffer_size the maximum number of bytes to read into the
+ * message buffer
+ * @return number of bytes received or negative integer on error
+ */
+int receive_broadcast(listener_socket_t* listener_socket, char* message_buffer,
+    size_t message_buffer_size);
+
 #endif // DISCO_BROADCAST_H
