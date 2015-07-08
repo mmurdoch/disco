@@ -92,6 +92,13 @@ int set_receive_timeout(udp_socket_t* socket, size_t milliseconds) {
         &timeout, sizeof(timeout));
 }
 
+int set_send_timeout(udp_socket_t* socket, size_t milliseconds) {
+    struct timeval timeout = milliseconds_to_timeval(milliseconds);
+
+    return setsockopt(socket->socket, SOL_SOCKET, SO_SNDTIMEO,
+        &timeout, sizeof(timeout));
+}
+
 in_port_t get_port_from_sockaddr(struct sockaddr* address) {
     if (address->sa_family == AF_INET) {
         return (((struct sockaddr_in*)address)->sin_port);

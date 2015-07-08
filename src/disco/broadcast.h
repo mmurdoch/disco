@@ -17,9 +17,12 @@ typedef struct {
  *
  * @param broadcast_socket on success populated with the created socket
  * @param port the port to which to broadcast
+ * @param timeout_milliseconds the number of milliseconds to wait before
+ * timing out when broadcasting messages
  * @return 0 on success, non-zero on failure
  */
-int create_broadcast_socket(broadcast_socket_t* broadcast_socket, int port);
+int create_broadcast_socket(broadcast_socket_t* broadcast_socket, int port,
+    size_t timeout_milliseconds);
 
 /**
  * Destroys a socket created via create_broadcast_socket.
