@@ -106,7 +106,7 @@ int send_message(udp_socket_t* socket, const char* message);
  * @return the number of bytes written to the message buffer or negative
  * integer on error
  */
-int receive_message(udp_socket_t* socket, char* message,
-    size_t max_message_length);
+int receive_message(udp_socket_t* socket, char* message_buffer,
+    size_t message_buffer_size);
 
 #endif // DISCO_UDP_H

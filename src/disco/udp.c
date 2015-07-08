@@ -126,12 +126,12 @@ int bind_to_address(udp_socket_t* socket) {
         get_address_length(socket));
 }
 
-int receive_message(udp_socket_t* socket, char* message,
-    size_t max_message_length) {
+int receive_message(udp_socket_t* socket, char* message_buffer,
+    size_t message_buffer_size) {
     struct sockaddr_storage sent_from_address;
     socklen_t sent_from_address_length = sizeof(sent_from_address);
 
     return recvfrom(get_socket_handle(socket),
-        message, max_message_length-1 , 0,
+        message_buffer, message_buffer_size-1 , 0,
         (struct sockaddr *) &sent_from_address, &sent_from_address_length);
 }
