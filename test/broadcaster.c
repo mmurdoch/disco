@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    if (broadcast_message(&broadcast_socket, "DSC10HERE") != 0) {
+    if (broadcast_message(&broadcast_socket, "DSC10HERE") < 0) {
         fprintf(stderr, "Failed to send broadcast message\n");
         destroy_broadcast_socket(&broadcast_socket);
         return 1;

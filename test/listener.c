@@ -17,7 +17,7 @@ int main() {
 
     int message_length = receive_broadcast(&listener_socket,
         message_buffer, message_buffer_size);
-    if (message_length == -1) {
+    if (message_length < 0) {
         destroy_listener_socket(&listener_socket);
         fprintf(stderr, "Failed to receive broadcast message\n");
         return 1;
