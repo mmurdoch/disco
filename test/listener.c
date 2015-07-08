@@ -2,7 +2,6 @@
 
 #include <disco/broadcast.h>
 
-
 int main() {
     listener_socket_t listener_socket;
     int port = 4950;
