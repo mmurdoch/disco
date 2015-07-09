@@ -36,11 +36,22 @@ void test_one_thousand_and_one_milliseconds_to_timeval() {
     expect(t.tv_sec == 1 && t.tv_usec == 1000);
 }
 
+void test_zero_milliseconds_to_timespec() {
+    size_t milliseconds = 0;
+
+    struct timespec t = milliseconds_to_timespec(milliseconds);
+
+    expect(t.tv_sec == 0 && t.tv_nsec == 0);
+}
+
 int main() {
     add_test(test_zero_milliseconds_to_timeval);
     add_test(test_one_millisecond_to_timeval);
     add_test(test_one_thousand_milliseconds_to_timeval);
     add_test(test_one_thousand_and_one_milliseconds_to_timeval);
+    add_test(test_zero_milliseconds_to_timespec);
+    //add_test(test_one_millisecond_to_timespec);
+    //add_test(test_one_million_milliseconds_to_timespec)
 
     return run_tests();
 }

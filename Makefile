@@ -2,6 +2,8 @@ all:
 	rm -rf build
 	mkdir -p build/test
 
+	gcc test/disco.c src/disco/udp.c src/disco/time.c src/disco/broadcast.c -I src -o build/test/disco
+
 	gcc test/detest-test.c src/detest/detest.c -I src -o build/test/detest-test
 	build/test/detest-test
 
