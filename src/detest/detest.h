@@ -10,7 +10,7 @@ typedef struct test_function_node_t test_function_node_t;
 
 struct test_function_node_t {
     void (*test_function)();
-    test_function_node_t* next; // Unknown! Forward declare?
+    test_function_node_t* next;
 };
 
 typedef struct {

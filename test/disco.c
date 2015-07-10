@@ -38,35 +38,12 @@ void destroy_uuid_string(char* uuid_string) {
     free(uuid_string);
 }
 
-char* create_identification_broadcast_message() {
-    char* protocol_id = "DSC";
-    char* protocol_version = "1.0";
-    char* uuid_string = create_uuid_string();
-    char* greeting_message = "HERE";
+typedef struct peer_t peer_t;
 
-    int protocol_id_length = strlen(protocol_id);
-    int protocol_version_length = strlen(protocol_version);
-    int uuid_string_length = strlen(uuid_string);
-    int greeting_message_length = strlen(greeting_message);
-    int message_length = protocol_id_length +
-        protocol_version_length + uuid_string_length +
-        greeting_message_length + 1;
-    char* message = (char*) malloc(sizeof(char) * message_length);
-    if (message == NULL) {
-        return NULL;
-    }
-
-    snprintf(message, message_length, "%s%s%s%s",
-        protocol_id, protocol_version, uuid_string, greeting_message);
-
-    destroy_uuid_string(uuid_string);
-
-    return message;
-}
-
-void destroy_identification_broadcast_message(char* message) {
-    free(message);
-}
+struct peer_t {
+    char* uuid_string;
+    peer_t* next;
+};
 
 int main() {
     broadcast_socket_t broadcast_socket;
@@ -84,21 +61,25 @@ int main() {
         return 1;
     }
 
-    char* message = create_identification_broadcast_message();
-    if (message == NULL) {
-        fprintf(stderr, "Failed to create identification message\n");
+    char* uuid_string = create_uuid_string();
+    if (uuid_string == NULL) {
+        fprintf(stderr, "Failed to create UUID\n");
         return 1;
     }
 
+    peer_t me = {0};
+    me.uuid_string = uuid_string;
+
     for (int i = 0; i < 100; i++) {
-        if (broadcast_message(&broadcast_socket, message) < 0) {
+        if (broadcast_message(&broadcast_socket, uuid_string) < 0) {
             fprintf(stderr, "Failed to send broadcast message\n");
-            destroy_identification_broadcast_message(message);
+            destroy_uuid_string(uuid_string);
+            destroy_listener_socket(&listener_socket);
             destroy_broadcast_socket(&broadcast_socket);
             return 1;
         }
 
-        printf("Broadcasted message: %s\n", message);
+        printf("Broadcasted ID: %s\n", uuid_string);
 
         size_t message_buffer_size = 100;
         char message_buffer[message_buffer_size];
@@ -109,14 +90,16 @@ int main() {
             if (received_message_length == -1) {
                 sleep_milliseconds(100);
             } else {
-                printf("Received message:    %s\n", message_buffer);
+                if (strcmp(message_buffer, me.uuid_string) != 0) {
+                    printf("Peer found:     %s\n", message_buffer);
+                }
             }
         }
 
         sleep_milliseconds(100);
     }
 
-    destroy_identification_broadcast_message(message);
+    destroy_uuid_string(uuid_string);
     destroy_listener_socket(&listener_socket);
     destroy_broadcast_socket(&broadcast_socket);
 
