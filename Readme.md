@@ -3,7 +3,6 @@ public domain for maximum portability.
 
 TODO
 ---
-* Add timeout_milliseconds parameter to create_broadcast_socket()
 * Cleanup Makefile
 * Levelize
   * network.h - socket handling (options, creation, address handling, port conversion, etc.)
@@ -11,9 +10,9 @@ TODO
   * disco.h - discovery API (handshake, versioning, etc.)
 * broadcaster.c - change to use INADDR_BROADCAST (rather than 255.255.255.255)
 * Support multicast on IPv6
-* Make C versions work on Windows
-* Make C versions work on Linux
-* Encapsulate discovery into a library ('Disco') - prefix functions with dsc_
+* Get working on Windows
+* Get working on Linux
+* Encapsulate discovery into a library ('Disco')
 
 * Work out discovery API
 ```
